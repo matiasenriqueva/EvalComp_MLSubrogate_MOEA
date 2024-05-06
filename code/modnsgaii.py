@@ -52,7 +52,7 @@ class NSGAII(GeneticAlgorithm[S, R]):
         population_generator: Generator = store.default_generator,
         population_evaluator: Evaluator = store.default_evaluator,
         dominance_comparator: Comparator = store.default_comparator,
-        sample_size_ml: int = 200,
+        batch_sample_percentaje: float = 0.1,
     ):
         """
         NSGA-II implementation as described in
@@ -84,7 +84,7 @@ class NSGAII(GeneticAlgorithm[S, R]):
             population_generator=population_generator,
         )
         self.dominance_comparator = dominance_comparator
-        self.sample_size_ml = sample_size_ml
+        self.batch_sample_percentaje = batch_sample_percentaje
 
     def replacement(self, population: List[S], offspring_population: List[S]) -> List[List[S]]:
         """This method joins the current and offspring populations to produce the population of the next generation
@@ -110,6 +110,8 @@ class NSGAII(GeneticAlgorithm[S, R]):
     
     def run(self):
         """Execute the algorithm."""
+        '''Create the initial population and model'''
+        surrogate_ml = RegressorChainSurrogate()
         evaluate_surrogate = False
         train_surrogate = False
         historical_solutions = []
@@ -118,34 +120,45 @@ class NSGAII(GeneticAlgorithm[S, R]):
         self.solutions = self.create_initial_solutions()
         self.solutions = self.evaluate(self.solutions)
 
+        '''Add the initial population to the historical solutions for train data'''
         self.init_progress()
-        historical_solutions.append(self.solutions)
+        for solution in self.solutions:
+            historical_solutions.append(solution)
+        
+        while not self.stopping_condition_is_met():
+            mating_population = self.selection(self.solutions)
+            offspring_population = self.reproduction(mating_population)
+            
+            if  (self.get_termination_criterion().current_evaluation() % int(self.batch_sample_percentaje*self.get_termination_criterion().max_evaluation()) == 0):
+                evaluate_surrogate = not evaluate_surrogate
+                #train_surrogate = False
 
-        print("objectives sample")
-        print(self.solutions[0].objectives)
-
-        """while not self.stopping_condition_is_met():
-            offspring_population = self.reproduction(self.solutions)
-            if self.get_termination_criterion().get_current_evaluations() >= self.sample_size_ml:
-                evaluate_surrogate = True
-                train_surrogate = True
-            if train_surrogate:
-                
-                train_surrogate = False
             if evaluate_surrogate:
-                surrogate = RegressorChainSurrogate(offspring_population)
-                offspring_population = surrogate.evaluate()
+                if not train_surrogate:
+                    surrogate_ml.fit(historical_solutions)
+                    offspring_population = surrogate_ml.evaluate(offspring_population)
+                    train_surrogate = True
+                else:
+                    offspring_population = surrogate_ml.evaluate(offspring_population)
+
             else:
                 offspring_population = self.evaluate(offspring_population)
             
-
+            '''Replacement of the solutions in the population'''
             self.solutions = self.replacement(self.solutions, offspring_population)
 
+            '''Add the new solutions to the historical solutions for train data'''
+            if not evaluate_surrogate:
+                for solution in self.solutions:
+                    historical_solutions.append(solution)
+
             self.update_progress()
+        
+        print("Number of surrogate evaluation: ",surrogate_ml.internal_execution)
 
-        self.total_computing_time = time.time() - self.start_computing_time"""
+        self.total_computing_time = time.time() - self.start_computing_time
 
-
+'''
 class DynamicNSGAII(NSGAII[S, R], DynamicAlgorithm):
     def __init__(
         self,
@@ -347,6 +360,7 @@ class DistributedNSGAII(Algorithm[S, R]):
 
     def get_name(self) -> str:
         return "dNSGA-II"
+    '''
 
 
 def reproduction(mating_population: List[S], problem, crossover_operator, mutation_operator) -> S:
