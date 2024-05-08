@@ -115,6 +115,7 @@ class NSGAII(GeneticAlgorithm[S, R]):
         evaluate_surrogate = False
         train_surrogate = False
         historical_solutions = []
+        train_cycle = 0
         self.start_computing_time = time.time()
 
         self.solutions = self.create_initial_solutions()
@@ -131,10 +132,12 @@ class NSGAII(GeneticAlgorithm[S, R]):
             
             if  (self.get_termination_criterion().current_evaluation() % int(self.batch_sample_percentaje*self.get_termination_criterion().max_evaluation()) == 0):
                 evaluate_surrogate = not evaluate_surrogate
-                #train_surrogate = False
+                train_surrogate = False
 
             if evaluate_surrogate:
                 if not train_surrogate:
+                    train_cycle += 1
+                    print("Train cycle: ",train_cycle)
                     surrogate_ml.fit(historical_solutions)
                     offspring_population = surrogate_ml.evaluate(offspring_population)
                     train_surrogate = True
@@ -152,6 +155,7 @@ class NSGAII(GeneticAlgorithm[S, R]):
                 for solution in self.solutions:
                     historical_solutions.append(solution)
 
+            #print("historical solution: ",len(historical_solutions))
             self.update_progress()
         
         print("Number of surrogate evaluation: ",surrogate_ml.internal_execution)

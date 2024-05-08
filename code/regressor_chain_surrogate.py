@@ -46,6 +46,7 @@ class RegressorChainSurrogate():
         complete_data = list()
         n_attributes = len(data[0].variables)
 
+
         '''Clean the duplicates from the data'''
         for solution in data:
            complete_data.append(solution.variables + solution.objectives)
@@ -55,12 +56,12 @@ class RegressorChainSurrogate():
 
         '''Add the actual data to previous train for not repeat the data'''
         if self.previous_train is not None:
-            print("previous ", self.previous_train)
-            print("no_duplicates ", no_duplicates_data)
-            valid_data = self.previous_train.merge(no_duplicates_data, how='left', indicator=True)
-            print(valid_data)
+            print("previous ", len(self.previous_train))
+            print("no_duplicates ", len(no_duplicates_data))
+            valid_data = no_duplicates_data.merge(self.previous_train, how='left', indicator=True)
+            #print("valid data ",valid_data)
             valid_data = valid_data[valid_data['_merge'] == 'left_only'].drop(columns='_merge')
-            print(valid_data)
+            #print(valid_data)
         else:
             valid_data = no_duplicates_data
 
