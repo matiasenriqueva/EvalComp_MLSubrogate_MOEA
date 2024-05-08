@@ -159,6 +159,8 @@ class NSGAII(GeneticAlgorithm[S, R]):
             self.update_progress()
         
         print("Number of surrogate evaluation: ",surrogate_ml.internal_execution)
+        print("Total surrogate evaluation: ", self.population_size*surrogate_ml.internal_execution)
+        print("Total evaluation: ", self.get_termination_criterion().max_evaluation())
 
         self.total_computing_time = time.time() - self.start_computing_time
 
