@@ -37,7 +37,7 @@ R = TypeVar("R")
 """
 
 
-class NSGAII(GeneticAlgorithm[S, R]):
+class S_NSGAII(GeneticAlgorithm[S, R]):
     def __init__(
         self,
         problem: Problem,
@@ -72,7 +72,7 @@ class NSGAII(GeneticAlgorithm[S, R]):
         :param mutation: Mutation operator (see :py:mod:`jmetal.operator.mutation`).
         :param crossover: Crossover operator (see :py:mod:`jmetal.operator.crossover`).
         """
-        super(NSGAII, self).__init__(
+        super(S_NSGAII, self).__init__(
             problem=problem,
             population_size=population_size,
             offspring_population_size=offspring_population_size,

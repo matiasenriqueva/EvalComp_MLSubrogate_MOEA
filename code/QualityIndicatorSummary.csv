@@ -1,0 +1,109 @@
+Algorithm,Problem,ExecutionId,IndicatorName,IndicatorValue
+NSGAII,ZDT1,0,EP,0.010860752488561887
+NSGAII,ZDT1,0,HV,0.6605162599111345
+NSGAII,ZDT1,1,EP,0.011916654253276888
+NSGAII,ZDT1,1,HV,0.6604018594084323
+NSGAII,ZDT1,2,EP,0.010221600123473396
+NSGAII,ZDT1,2,HV,0.6604258074267322
+NSGAII,ZDT1,0,Time,10.398946046829224
+NSGAII,ZDT1,1,Time,10.837818622589111
+NSGAII,ZDT1,2,Time,10.416897773742676
+NSGAII,ZDT2,0,EP,0.012813292089450146
+NSGAII,ZDT2,0,HV,0.3272712517999308
+NSGAII,ZDT2,1,EP,0.00956724845986312
+NSGAII,ZDT2,1,HV,0.32762473126727143
+NSGAII,ZDT2,2,EP,0.012024268822809492
+NSGAII,ZDT2,2,HV,0.327528856380082
+NSGAII,ZDT2,0,Time,10.712615489959717
+NSGAII,ZDT2,1,Time,10.603696584701538
+NSGAII,ZDT2,2,Time,12.066352605819702
+NSGAII,ZDT3,0,EP,0.00837703933417816
+NSGAII,ZDT3,0,HV,1.04112881195138
+NSGAII,ZDT3,1,EP,0.008734711896070224
+NSGAII,ZDT3,1,HV,1.0412573587698604
+NSGAII,ZDT3,2,EP,0.00862046066832478
+NSGAII,ZDT3,2,HV,1.0412151304874016
+NSGAII,ZDT3,0,Time,10.405073642730713
+NSGAII,ZDT3,1,Time,10.598936796188354
+NSGAII,ZDT3,2,Time,10.77927279472351
+NSGAII surrogate 10% batch size alternate,ZDT1,0,EP,-0.002230279364803134
+NSGAII surrogate 10% batch size alternate,ZDT1,0,HV,3.7288392323398427
+NSGAII surrogate 10% batch size alternate,ZDT1,1,EP,0.015908701092201216
+NSGAII surrogate 10% batch size alternate,ZDT1,1,HV,622.0375738379753
+NSGAII surrogate 10% batch size alternate,ZDT1,2,EP,-0.00019161870958114835
+NSGAII surrogate 10% batch size alternate,ZDT1,2,HV,66.88399241963862
+NSGAII surrogate 10% batch size alternate,ZDT1,0,Time,11.252950191497803
+NSGAII surrogate 10% batch size alternate,ZDT1,1,Time,11.219574213027954
+NSGAII surrogate 10% batch size alternate,ZDT1,2,Time,11.397920608520508
+NSGAII surrogate 10% batch size alternate,ZDT2,0,EP,-0.0019404333613038949
+NSGAII surrogate 10% batch size alternate,ZDT2,0,HV,611.0602179864976
+NSGAII surrogate 10% batch size alternate,ZDT2,1,EP,-113445.5222336317
+NSGAII surrogate 10% batch size alternate,ZDT2,1,HV,116441233912842.61
+NSGAII surrogate 10% batch size alternate,ZDT2,2,EP,-1647148.0928017863
+NSGAII surrogate 10% batch size alternate,ZDT2,2,HV,755040234200129.9
+NSGAII surrogate 10% batch size alternate,ZDT2,0,Time,11.185815811157227
+NSGAII surrogate 10% batch size alternate,ZDT2,1,Time,11.381719589233398
+NSGAII surrogate 10% batch size alternate,ZDT2,2,Time,11.70186185836792
+NSGAII surrogate 10% batch size alternate,ZDT3,0,EP,0.0012245388988739447
+NSGAII surrogate 10% batch size alternate,ZDT3,0,HV,47.68967441834085
+NSGAII surrogate 10% batch size alternate,ZDT3,1,EP,0.03274563217263085
+NSGAII surrogate 10% batch size alternate,ZDT3,1,HV,279.7741456851472
+NSGAII surrogate 10% batch size alternate,ZDT3,2,EP,2.2186738956056615
+NSGAII surrogate 10% batch size alternate,ZDT3,2,HV,0.0
+NSGAII surrogate 10% batch size alternate,ZDT3,0,Time,11.32835602760315
+NSGAII surrogate 10% batch size alternate,ZDT3,1,Time,11.548128604888916
+NSGAII surrogate 10% batch size alternate,ZDT3,2,Time,11.630976676940918
+NSGAII surrogate 30% batch size alternate,ZDT1,0,EP,-6.368224345537632e-05
+NSGAII surrogate 30% batch size alternate,ZDT1,0,HV,0.9098082387017387
+NSGAII surrogate 30% batch size alternate,ZDT1,1,EP,-8.307143999453093e-05
+NSGAII surrogate 30% batch size alternate,ZDT1,1,HV,1.3074469492792755
+NSGAII surrogate 30% batch size alternate,ZDT1,2,EP,-9.106004366044029e-05
+NSGAII surrogate 30% batch size alternate,ZDT1,2,HV,1.6366919988013509
+NSGAII surrogate 30% batch size alternate,ZDT1,0,Time,11.857466220855713
+NSGAII surrogate 30% batch size alternate,ZDT1,1,Time,10.98488187789917
+NSGAII surrogate 30% batch size alternate,ZDT1,2,Time,11.14898419380188
+NSGAII surrogate 30% batch size alternate,ZDT2,0,EP,-0.0022168489269897007
+NSGAII surrogate 30% batch size alternate,ZDT2,0,HV,2.807620889165056
+NSGAII surrogate 30% batch size alternate,ZDT2,1,EP,-0.0028563765479903136
+NSGAII surrogate 30% batch size alternate,ZDT2,1,HV,3.215480231033298
+NSGAII surrogate 30% batch size alternate,ZDT2,2,EP,-0.002660842879303349
+NSGAII surrogate 30% batch size alternate,ZDT2,2,HV,5.714875101814921
+NSGAII surrogate 30% batch size alternate,ZDT2,0,Time,10.992591142654419
+NSGAII surrogate 30% batch size alternate,ZDT2,1,Time,10.93346118927002
+NSGAII surrogate 30% batch size alternate,ZDT2,2,Time,11.281556129455566
+NSGAII surrogate 30% batch size alternate,ZDT3,0,EP,-3.5918217749120185e-05
+NSGAII surrogate 30% batch size alternate,ZDT3,0,HV,2.5823406037510273
+NSGAII surrogate 30% batch size alternate,ZDT3,1,EP,-3.296090627535886e-05
+NSGAII surrogate 30% batch size alternate,ZDT3,1,HV,1.268446121067991
+NSGAII surrogate 30% batch size alternate,ZDT3,2,EP,3.177565288947637e-06
+NSGAII surrogate 30% batch size alternate,ZDT3,2,HV,1.3026861983113256
+NSGAII surrogate 30% batch size alternate,ZDT3,0,Time,11.682210922241211
+NSGAII surrogate 30% batch size alternate,ZDT3,1,Time,10.97782278060913
+NSGAII surrogate 30% batch size alternate,ZDT3,2,Time,11.147027254104614
+NSGAII surrogate 50% batch size alternate,ZDT1,0,EP,0.015423135758735274
+NSGAII surrogate 50% batch size alternate,ZDT1,0,HV,0.699996959869582
+NSGAII surrogate 50% batch size alternate,ZDT1,1,EP,0.010900460625992148
+NSGAII surrogate 50% batch size alternate,ZDT1,1,HV,0.7109890715400086
+NSGAII surrogate 50% batch size alternate,ZDT1,2,EP,0.012236563107118348
+NSGAII surrogate 50% batch size alternate,ZDT1,2,HV,0.6932228682317643
+NSGAII surrogate 50% batch size alternate,ZDT1,0,Time,11.416085481643677
+NSGAII surrogate 50% batch size alternate,ZDT1,1,Time,10.848610877990723
+NSGAII surrogate 50% batch size alternate,ZDT1,2,Time,10.899093866348267
+NSGAII surrogate 50% batch size alternate,ZDT2,0,EP,0.014356451003303627
+NSGAII surrogate 50% batch size alternate,ZDT2,0,HV,0.35798507679465735
+NSGAII surrogate 50% batch size alternate,ZDT2,1,EP,0.01017747879510289
+NSGAII surrogate 50% batch size alternate,ZDT2,1,HV,0.3581532179220947
+NSGAII surrogate 50% batch size alternate,ZDT2,2,EP,0.010375332099074708
+NSGAII surrogate 50% batch size alternate,ZDT2,2,HV,0.36097781918880273
+NSGAII surrogate 50% batch size alternate,ZDT2,0,Time,10.851461172103882
+NSGAII surrogate 50% batch size alternate,ZDT2,1,Time,10.713979959487915
+NSGAII surrogate 50% batch size alternate,ZDT2,2,Time,11.138197183609009
+NSGAII surrogate 50% batch size alternate,ZDT3,0,EP,0.01119115407048632
+NSGAII surrogate 50% batch size alternate,ZDT3,0,HV,1.0864322958906178
+NSGAII surrogate 50% batch size alternate,ZDT3,1,EP,0.01225875929249172
+NSGAII surrogate 50% batch size alternate,ZDT3,1,HV,1.1011017570067498
+NSGAII surrogate 50% batch size alternate,ZDT3,2,EP,0.008608577833223996
+NSGAII surrogate 50% batch size alternate,ZDT3,2,HV,1.1005470626464502
+NSGAII surrogate 50% batch size alternate,ZDT3,0,Time,10.69953179359436
+NSGAII surrogate 50% batch size alternate,ZDT3,1,Time,10.895339012145996
+NSGAII surrogate 50% batch size alternate,ZDT3,2,Time,11.151941537857056
