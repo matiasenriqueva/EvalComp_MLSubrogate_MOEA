@@ -23,7 +23,11 @@ from jmetal.util.replacement import (
 )
 from jmetal.util.termination_criterion import TerminationCriterion
 
-from regressor_chain_surrogate import RegressorChainSurrogate
+from surrogate_models.regressor_chain_surrogate import RegressorChainSurrogate
+from surrogate_models.surrogate import Surrogate
+
+import matplotlib.pyplot as plt
+import numpy as np
 
 S = TypeVar("S")
 R = TypeVar("R")
@@ -53,6 +57,7 @@ class S_NSGAII(GeneticAlgorithm[S, R]):
         population_evaluator: Evaluator = store.default_evaluator,
         dominance_comparator: Comparator = store.default_comparator,
         batch_sample_percentaje: float = 0.1,
+        surrogate_ml: Surrogate = None,
     ):
         """
         NSGA-II implementation as described in
@@ -85,6 +90,7 @@ class S_NSGAII(GeneticAlgorithm[S, R]):
         )
         self.dominance_comparator = dominance_comparator
         self.batch_sample_percentaje = batch_sample_percentaje
+        self.surrogate_ml = surrogate_ml
 
     def replacement(self, population: List[S], offspring_population: List[S]) -> List[List[S]]:
         """This method joins the current and offspring populations to produce the population of the next generation
@@ -111,7 +117,7 @@ class S_NSGAII(GeneticAlgorithm[S, R]):
     def run(self):
         """Execute the algorithm."""
         '''Create the initial population and model'''
-        surrogate_ml = RegressorChainSurrogate()
+        #surrogate_ml = RegressorChainSurrogate()
         evaluate_surrogate = False
         train_surrogate = False
         historical_solutions = []
@@ -138,11 +144,13 @@ class S_NSGAII(GeneticAlgorithm[S, R]):
                 if not train_surrogate:
                     train_cycle += 1
                     print("Train cycle: ",train_cycle)
-                    surrogate_ml.fit(historical_solutions)
-                    offspring_population = surrogate_ml.evaluate(offspring_population)
+                    self.surrogate_ml.fit(historical_solutions)
+                    offspring_population = self.surrogate_ml.evaluate(offspring_population)
                     train_surrogate = True
+                    #data = self.surrogate_ml.get_data_train()
+                    #plt.hist(data[0])
                 else:
-                    offspring_population = surrogate_ml.evaluate(offspring_population)
+                    offspring_population = self.surrogate_ml.evaluate(offspring_population)
 
             else:
                 offspring_population = self.evaluate(offspring_population)
@@ -158,8 +166,8 @@ class S_NSGAII(GeneticAlgorithm[S, R]):
             #print("historical solution: ",len(historical_solutions))
             self.update_progress()
         
-        print("Number of surrogate evaluation: ",surrogate_ml.internal_execution)
-        print("Total surrogate evaluation: ", self.population_size*surrogate_ml.internal_execution)
+        print("Number of surrogate evaluation: ",self.surrogate_ml.internal_execution)
+        print("Total surrogate evaluation: ", self.population_size*self.surrogate_ml.internal_execution)
         print("Total evaluation: ", self.get_termination_criterion().max_evaluation())
 
         self.total_computing_time = time.time() - self.start_computing_time
