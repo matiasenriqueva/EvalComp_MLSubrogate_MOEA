@@ -11,20 +11,21 @@ from surrogate_models.surrogate import Surrogate
 
 
 class RegressorChainSurrogate(Surrogate):
-    is_train = False
-    previous_train = None
-    sample_x = None
-    sample_y = None
-    sx1 = None
-    sx2 = None
-    sy1 = None
-    sy2 = None
-    internal_execution = 0
-    train_counter = 0
+       
     
-    def __init__(self):
+    def __init__(self, verbose=False):
         self.rc = RegressorChain(SGDRegressor(loss='squared_error', random_state=1))
         self.scaler = StandardScaler()
+        self.is_train = False
+        self.previous_train = None
+        self.internal_execution = 0
+        self.train_counter = 0
+        '''diversity: float:total, float:valid'''
+        self.diversity = list()
+        self.previous_len_data=0
+        self.len_data = 0
+        self.len_entry_data = 0 
+        self.verbose = verbose
 
     def evaluate(self, data):
         '''Evaluate the regressor chain with the given data'''
@@ -48,11 +49,21 @@ class RegressorChainSurrogate(Surrogate):
             
 
     def fit(self, data):
-        if not self.is_train: print("Training algorithm ") 
-        else: print("Partial training algorithm")
+        if self.verbose:
+            if not self.is_train: print("Training algorithm ") 
+            else: print("Partial training algorithm")
         '''Initialize the regressor chain with data'''
         complete_data = list()
         n_attributes = len(data[0].variables)
+
+        '''Check total amount of new data'''
+        if self.len_data == 0:
+            self.len_data = len(data)
+        else:
+            self.previous_len_data = self.len_data
+            self.len_data = len(data)
+        
+        self.len_entry_data = self.len_data - self.previous_len_data
 
 
         '''Clean the duplicates from the data'''
@@ -60,18 +71,21 @@ class RegressorChainSurrogate(Surrogate):
            complete_data.append(solution.variables + solution.objectives)
         complete_data = pd.DataFrame(complete_data)
         no_duplicates_data = complete_data.drop_duplicates()
-        print("duplicates rows: ", complete_data.shape[0] - no_duplicates_data.shape[0])
+        if self.verbose:
+            print("duplicates rows: ", complete_data.shape[0] - no_duplicates_data.shape[0])
 
         '''Add the actual data to previous train for not repeat the data'''
         if self.previous_train is not None:
-            print("previous ", len(self.previous_train))
-            print("no_duplicates ", len(no_duplicates_data))
+            if self.verbose:
+                print("previous ", len(self.previous_train))
+                print("no_duplicates ", len(no_duplicates_data))
             valid_data = no_duplicates_data.merge(self.previous_train, how='left', indicator=True)
             valid_data = valid_data[valid_data['_merge'] == 'left_only'].drop(columns='_merge')            
         else:
             valid_data = no_duplicates_data
         
-        print("valida data: ", valid_data.shape[0])
+        if self.verbose:
+            print("valida data: ", valid_data.shape[0])
 
         '''Scale the data'''
         scaling_data = self.scaler.fit_transform(valid_data)
@@ -99,31 +113,12 @@ class RegressorChainSurrogate(Surrogate):
             self.is_train = True
         else:
             self.rc.partial_fit(X_train, y_train)
-        
-        '''
-        print("==== MSE old evaluation ====")
-        mse = mean_squared_error(y_test, self.rc.predict(X_test))
-        print("MSE evaluation train: ", mse)'''
-        
+                
         self.add_data(valid_data)
-        #self.add_sample_data(X_test, y_test)
-    '''
-        if self.train_counter <= 1:
-            print("==== MSE new evaluation ====")
-            mse = mean_squared_error(self.sample_y, self.rc.predict(self.sample_x))
-            print("MSE evaluation train all samples: ", mse) 
-
-            if self.train_counter == 1:
-                print("==== MSE new evaluation ====")
-                mse = mean_squared_error(self.sy1, self.rc.predict(self.sx1))
-                print("MSE evaluation train 1 samples: ", mse) 
-
-                print("==== MSE new evaluation ====")
-                mse = mean_squared_error(self.sy2, self.rc.predict(self.sx2))
-                print("MSE evaluation train 2 samples: ", mse)
 
         self.train_counter += 1
-        '''
+        
+        self.diversity.append([self.len_entry_data, valid_data.shape[0]])        
 
         
     def add_data(self, data):
@@ -144,4 +139,5 @@ class RegressorChainSurrogate(Surrogate):
             self.sample_x = pd.concat([self.sample_x, pd.DataFrame(X)])
             self.sample_y = pd.concat([self.sample_y, pd.DataFrame(Y)])
         
-    
+    def get_diversity(self):
+        return self.diversity

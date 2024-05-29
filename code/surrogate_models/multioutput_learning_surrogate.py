@@ -14,15 +14,21 @@ from surrogate_models.surrogate import Surrogate
 
 
 class MultiOutputLearnerSurrogate(Surrogate):
-    is_train = False
-    previous_train = None
-    internal_execution = 0
-    train_counter = 0
-    data_train = None
     
-    def __init__(self):
-        self.model = MultiOutputLearner(base_estimator=MLPRegressor(random_state=42 , max_iter=500, hidden_layer_sizes=50, solver='adam', learning_rate='adaptive', learning_rate_init=0.01, verbose=False, warm_start=True, activation='tanh'))
+    def __init__(self, random_state=42 , max_iter=500, hidden_layer_sizes=50, solver='adam', learning_rate='adaptive', learning_rate_init=0.01, verbose=False, warm_start=True, activation='tanh'):
+        self.model = MultiOutputLearner(base_estimator=MLPRegressor(random_state=random_state , max_iter=max_iter, hidden_layer_sizes=hidden_layer_sizes, solver=solver, learning_rate=learning_rate, learning_rate_init=learning_rate_init, verbose=verbose, warm_start=warm_start, activation=activation))
         self.scaler = StandardScaler()
+        self.is_train = False
+        self.previous_train = None
+        self.internal_execution = 0
+        self.train_counter = 0
+        self.data_train = None
+        '''diversity: float:total, float:valid'''
+        self.diversity = list()
+        self.previous_len_data=0
+        self.len_data = 0
+        self.len_entry_data = 0
+        self.verbose = verbose
 
     def evaluate(self, data):
         '''Evaluate the regressor chain with the given data'''
@@ -46,11 +52,21 @@ class MultiOutputLearnerSurrogate(Surrogate):
             
 
     def fit(self, data):
-        if not self.is_train: print("Training algorithm ") 
-        else: print("Partial training algorithm")
+        if self.verbose:
+            if not self.is_train: print("Training algorithm ") 
+            else: print("Partial training algorithm")
         '''Initialize the multioutput learner with data'''
         complete_data = list()
         n_attributes = len(data[0].variables)
+
+        '''Check total amount of new data'''
+        if self.len_data == 0:
+            self.len_data = len(data)
+        else:
+            self.previous_len_data = self.len_data
+            self.len_data = len(data)
+        
+        self.len_entry_data = self.len_data - self.previous_len_data
 
 
         '''Clean the duplicates from the data'''
@@ -58,19 +74,22 @@ class MultiOutputLearnerSurrogate(Surrogate):
            complete_data.append(solution.variables + solution.objectives)
         complete_data = pd.DataFrame(complete_data)
         no_duplicates_data = complete_data.drop_duplicates()
-        print("duplicates rows: ", complete_data.shape[0] - no_duplicates_data.shape[0])
-        #print("No duplicates rows: ", no_duplicates_data.shape[0])
+        if self.verbose:
+            print("duplicates rows: ", complete_data.shape[0] - no_duplicates_data.shape[0])
+            print("No duplicates rows: ", no_duplicates_data.shape[0])
 
         '''Add the actual data to previous train for not repeat the data'''
         if self.previous_train is not None:
-            print("previous ", len(self.previous_train))
-            print("no_duplicates ", len(no_duplicates_data))
+            if self.verbose:
+                print("previous ", len(self.previous_train))
+                print("no_duplicates ", len(no_duplicates_data))
             valid_data = no_duplicates_data.merge(self.previous_train, how='left', indicator=True)
             valid_data = valid_data[valid_data['_merge'] == 'left_only'].drop(columns='_merge')            
         else:
             valid_data = no_duplicates_data
 
-        print("valid data rows: ", valid_data.shape[0])
+        if self.verbose:
+            print("valid data rows: ", valid_data.shape[0])
         '''Scale the data'''
         scaling_data = self.scaler.fit_transform(valid_data)
 
@@ -93,6 +112,9 @@ class MultiOutputLearnerSurrogate(Surrogate):
 
         self.train_counter += 1
 
+        self.diversity.append([self.len_entry_data, valid_data.shape[0]])
+
+
         
     def add_data(self, data):
         '''Add data to the regressor chain'''
@@ -114,5 +136,7 @@ class MultiOutputLearnerSurrogate(Surrogate):
 
     def get_data_train(self):
         return self.data_train
-        
+    
+    def get_diversity(self):
+        return self.diversity
     

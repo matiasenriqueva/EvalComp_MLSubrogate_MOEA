@@ -26,11 +26,16 @@ from jmetal.util.termination_criterion import TerminationCriterion
 from surrogate_models.regressor_chain_surrogate import RegressorChainSurrogate
 from surrogate_models.surrogate import Surrogate
 
+from jmetal.logger import get_logger
+
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 
 S = TypeVar("S")
 R = TypeVar("R")
+
+logger = get_logger(__name__)
 
 """
 .. module:: NSGA-II
@@ -91,6 +96,8 @@ class S_NSGAII(GeneticAlgorithm[S, R]):
         self.dominance_comparator = dominance_comparator
         self.batch_sample_percentaje = batch_sample_percentaje
         self.surrogate_ml = surrogate_ml
+        self.identification = id(self)
+        self.divertsity_values = None
 
     def replacement(self, population: List[S], offspring_population: List[S]) -> List[List[S]]:
         """This method joins the current and offspring populations to produce the population of the next generation
@@ -114,10 +121,13 @@ class S_NSGAII(GeneticAlgorithm[S, R]):
     def get_name(self) -> str:
         return "NSGAII"
     
+    def get_diversity(self):
+        self.divertsity_values = self.surrogate_ml.get_diversity().copy()
+        return self.divertsity_values
+    
     def run(self):
         """Execute the algorithm."""
         '''Create the initial population and model'''
-        #surrogate_ml = RegressorChainSurrogate()
         evaluate_surrogate = False
         train_surrogate = False
         historical_solutions = []
@@ -143,12 +153,10 @@ class S_NSGAII(GeneticAlgorithm[S, R]):
             if evaluate_surrogate:
                 if not train_surrogate:
                     train_cycle += 1
-                    print("Train cycle: ",train_cycle)
+                    logger.debug("Train cycle: ",train_cycle)
                     self.surrogate_ml.fit(historical_solutions)
                     offspring_population = self.surrogate_ml.evaluate(offspring_population)
                     train_surrogate = True
-                    #data = self.surrogate_ml.get_data_train()
-                    #plt.hist(data[0])
                 else:
                     offspring_population = self.surrogate_ml.evaluate(offspring_population)
 
@@ -163,20 +171,19 @@ class S_NSGAII(GeneticAlgorithm[S, R]):
                 for solution in self.solutions:
                     historical_solutions.append(solution)
 
-            #print("historical solution: ",len(historical_solutions))
             self.update_progress()
         
-        print("Number of surrogate evaluation: ",self.surrogate_ml.internal_execution)
-        print("Total surrogate evaluation: ", self.population_size*self.surrogate_ml.internal_execution)
-        print("Total evaluation: ", self.get_termination_criterion().max_evaluation())
+        logger.debug("Number of surrogate evaluation: ",self.surrogate_ml.internal_execution)
+        logger.debug("Total surrogate evaluation: ", self.population_size*self.surrogate_ml.internal_execution)
+        logger.debug("Total evaluation: ", self.get_termination_criterion().max_evaluation())
 
         self.total_computing_time = time.time() - self.start_computing_time
 
-'''
-class DynamicNSGAII(NSGAII[S, R], DynamicAlgorithm):
+
+class NSGAII(GeneticAlgorithm[S, R]):
     def __init__(
         self,
-        problem: DynamicProblem[S],
+        problem: Problem,
         population_size: int,
         offspring_population_size: int,
         mutation: Mutation,
@@ -187,195 +194,145 @@ class DynamicNSGAII(NSGAII[S, R], DynamicAlgorithm):
         termination_criterion: TerminationCriterion = store.default_termination_criteria,
         population_generator: Generator = store.default_generator,
         population_evaluator: Evaluator = store.default_evaluator,
-        dominance_comparator: DominanceComparator = DominanceComparator(),
+        dominance_comparator: Comparator = store.default_comparator,
+        batch_sample_percentaje: float = 0.1,
     ):
-        super(DynamicNSGAII, self).__init__(
+        """
+        NSGA-II implementation as described in
+
+        * K. Deb, A. Pratap, S. Agarwal and T. Meyarivan, "A fast and elitist
+          multiobjective genetic algorithm: NSGA-II," in IEEE Transactions on Evolutionary Computation,
+          vol. 6, no. 2, pp. 182-197, Apr 2002. doi: 10.1109/4235.996017
+
+        NSGA-II is a genetic algorithm (GA), i.e. it belongs to the evolutionary algorithms (EAs)
+        family. The implementation of NSGA-II provided in jMetalPy follows the evolutionary
+        algorithm template described in the algorithm module (:py:mod:`jmetal.core.algorithm`).
+
+        .. note:: A steady-state version of this algorithm can be run by setting the offspring size to 1.
+
+        :param problem: The problem to solve.
+        :param population_size: Size of the population.
+        :param mutation: Mutation operator (see :py:mod:`jmetal.operator.mutation`).
+        :param crossover: Crossover operator (see :py:mod:`jmetal.operator.crossover`).
+        """
+        super(NSGAII, self).__init__(
             problem=problem,
             population_size=population_size,
             offspring_population_size=offspring_population_size,
             mutation=mutation,
             crossover=crossover,
             selection=selection,
+            termination_criterion=termination_criterion,
             population_evaluator=population_evaluator,
             population_generator=population_generator,
-            termination_criterion=termination_criterion,
-            dominance_comparator=dominance_comparator,
         )
-        self.completed_iterations = 0
-        self.start_computing_time = 0
-        self.total_computing_time = 0
-
-    def restart(self):
-        self.solutions = self.evaluate(self.solutions)
-
-    def update_progress(self):
-        if self.problem.the_problem_has_changed():
-            self.restart()
-            self.problem.clear_changed()
-
-        observable_data = self.observable_data()
-        self.observable.notify_all(**observable_data)
-
-        self.evaluations += self.offspring_population_size
-
-    def stopping_condition_is_met(self):
-        if self.termination_criterion.is_met:
-            observable_data = self.observable_data()
-            observable_data["TERMINATION_CRITERIA_IS_MET"] = True
-            self.observable.notify_all(**observable_data)
-
-            self.restart()
-            self.init_progress()
-
-            self.completed_iterations += 1
-
-
-class DistributedNSGAII(Algorithm[S, R]):
-    def __init__(
-        self,
-        problem: Problem,
-        population_size: int,
-        mutation: Mutation,
-        crossover: Crossover,
-        number_of_cores: int,
-        client,
-        selection: Selection = BinaryTournamentSelection(
-            MultiComparator([FastNonDominatedRanking.get_comparator(), CrowdingDistance.get_comparator()])
-        ),
-        termination_criterion: TerminationCriterion = store.default_termination_criteria,
-        dominance_comparator: DominanceComparator = DominanceComparator(),
-    ):
-        super(DistributedNSGAII, self).__init__()
-        self.problem = problem
-        self.population_size = population_size
-        self.mutation_operator = mutation
-        self.crossover_operator = crossover
-        self.selection_operator = selection
         self.dominance_comparator = dominance_comparator
+        self.batch_sample_percentaje = batch_sample_percentaje
+        self.previous_data = None
+        '''diversity: float:total, float:valid'''
+        self.diversity = list()
+        self.previous_len_data=0
+        self.len_data = 0
+        self.len_entry_data = 0
 
-        self.termination_criterion = termination_criterion
-        self.observable.register(termination_criterion)
+    def replacement(self, population: List[S], offspring_population: List[S]) -> List[List[S]]:
+        """This method joins the current and offspring populations to produce the population of the next generation
+        by applying the ranking and crowding distance selection.
 
-        self.number_of_cores = number_of_cores
-        self.client = client
+        :param population: Parent population.
+        :param offspring_population: Offspring population.
+        :return: New population after ranking and crowding distance selection is applied.
+        """
+        ranking = FastNonDominatedRanking(self.dominance_comparator)
+        density_estimator = CrowdingDistance()
 
-    def create_initial_solutions(self) -> List[S]:
-        return [self.problem.create_solution() for _ in range(self.number_of_cores)]
+        r = RankingAndDensityEstimatorReplacement(ranking, density_estimator, RemovalPolicyType.ONE_SHOT)
+        solutions = r.replace(population, offspring_population)
 
-    def evaluate(self, solutions: List[S]) -> List[S]:
-        return self.client.map(self.problem.evaluate, solutions)
-
-    def stopping_condition_is_met(self) -> bool:
-        return self.termination_criterion.is_met
-
-    def observable_data(self) -> dict:
-        ctime = time.time() - self.start_computing_time
-
-        return {
-            "PROBLEM": self.problem,
-            "EVALUATIONS": self.evaluations,
-            "SOLUTIONS": self.get_result(),
-            "COMPUTING_TIME": ctime,
-        }
-
-    def init_progress(self) -> None:
-        self.evaluations = self.number_of_cores
-
-        observable_data = self.observable_data()
-        self.observable.notify_all(**observable_data)
-
-    def step(self) -> None:
-        pass
-
-    def update_progress(self):
-        observable_data = self.observable_data()
-        self.observable.notify_all(**observable_data)
-
-    def run(self):
-        """Execute the algorithm."""
-        self.start_computing_time = time.time()
-
-        create_solution = dask.delayed(self.problem.create_solution)
-        evaluate_solution = dask.delayed(self.problem.evaluate)
-
-        task_pool = as_completed([], with_results=True)
-
-        for _ in range(self.number_of_cores):
-            new_solution = create_solution()
-            new_evaluated_solution = evaluate_solution(new_solution)
-            future = self.client.compute(new_evaluated_solution)
-
-            task_pool.add(future)
-
-        batches = task_pool.batches()
-
-        auxiliar_population = []
-        while len(auxiliar_population) < self.population_size:
-            batch = next(batches)
-            for _, received_solution in batch:
-                auxiliar_population.append(received_solution)
-
-                if len(auxiliar_population) < self.population_size:
-                    break
-
-            # submit as many new tasks as we collected
-            for _ in batch:
-                new_solution = create_solution()
-                new_evaluated_solution = evaluate_solution(new_solution)
-                future = self.client.compute(new_evaluated_solution)
-
-                task_pool.add(future)
-
-        self.init_progress()
-
-        # perform an algorithm step to create a new solution to be evaluated
-        while not self.stopping_condition_is_met():
-            batch = next(batches)
-
-            for _, received_solution in batch:
-                offspring_population = [received_solution]
-
-                # replacement
-                ranking = FastNonDominatedRanking(self.dominance_comparator)
-                density_estimator = CrowdingDistance()
-
-                r = RankingAndDensityEstimatorReplacement(ranking, density_estimator, RemovalPolicyType.ONE_SHOT)
-                auxiliar_population = r.replace(auxiliar_population, offspring_population)
-
-                # selection
-                mating_population = []
-                for _ in range(2):
-                    solution = self.selection_operator.execute(auxiliar_population)
-                    mating_population.append(solution)
-
-                # Reproduction and evaluation
-                new_task = self.client.submit(
-                    reproduction, mating_population, self.problem, self.crossover_operator, self.mutation_operator
-                )
-                task_pool.add(new_task)
-
-                # update progress
-                self.evaluations += 1
-                self.solutions = auxiliar_population
-
-                self.update_progress()
-
-                if self.stopping_condition_is_met():
-                    break
-
-        self.total_computing_time = time.time() - self.start_computing_time
-
-        # at this point, computation is done
-        for future, _ in task_pool:
-            future.cancel()
+        return solutions
 
     def get_result(self) -> R:
         return self.solutions
 
     def get_name(self) -> str:
-        return "dNSGA-II"
-    '''
+        return "NSGAII"
+    
+    def step(self):
+        mating_population = self.selection(self.solutions)
+        offspring_population = self.reproduction(mating_population)
+        offspring_population = self.evaluate(offspring_population)
 
+        self.solutions = self.replacement(self.solutions, offspring_population)
+    
+    def run(self):
+        historical_solutions = []
+        
+        add_data = True
+        evaluate_diversity = False
+
+        """Execute the algorithm."""
+        self.start_computing_time = time.time()
+
+        self.solutions = self.create_initial_solutions()
+
+        self.solutions = self.evaluate(self.solutions)
+
+        self.init_progress()
+
+        for solution in self.solutions:
+           historical_solutions.append(solution.variables + solution.objectives)
+
+        while not self.stopping_condition_is_met():
+            if  (self.get_termination_criterion().current_evaluation() % int(self.batch_sample_percentaje*self.get_termination_criterion().max_evaluation()) == 0):
+                add_data = not add_data
+                if not add_data:
+                    evaluate_diversity = True
+            
+
+            self.step()
+
+            if add_data:
+                for solution in self.solutions:
+                    historical_solutions.append(solution.variables + solution.objectives)
+            
+            if evaluate_diversity:
+                evaluate_diversity = False
+                self.valid_data(historical_solutions)
+
+            self.update_progress()
+
+        self.total_computing_time = time.time() - self.start_computing_time
+    
+    def valid_data(self, data):
+        '''Check total amount of new data'''
+        if self.len_data == 0:
+            self.len_data = len(data)
+        else:
+            self.previous_len_data = self.len_data
+            self.len_data = len(data)
+        
+        self.len_entry_data = self.len_data - self.previous_len_data
+
+        
+        '''Add the actual data to previous data for not repeat rows'''
+        complete_data = pd.DataFrame(data)
+        no_duplicates_data = complete_data.drop_duplicates()
+        if self.previous_data is not None:
+            valid_data = no_duplicates_data.merge(self.previous_data, how='left', indicator=True)
+            valid_data = valid_data[valid_data['_merge'] == 'left_only'].drop(columns='_merge')            
+        else:
+            valid_data = no_duplicates_data
+        
+        if self.previous_data is None:
+            self.previous_data = valid_data
+        else:
+            self.previous_data = pd.concat([self.previous_data, valid_data])
+        
+        self.diversity.append([self.len_entry_data, valid_data.shape[0]])
+
+    def get_diversity(self):
+        return self.diversity
+    
 
 def reproduction(mating_population: List[S], problem, crossover_operator, mutation_operator) -> S:
     offspring_pool = []
