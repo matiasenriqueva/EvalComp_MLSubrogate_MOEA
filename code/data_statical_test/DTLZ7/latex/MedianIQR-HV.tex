@@ -1,0 +1,24 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{tabularx}
+\usepackage{colortbl}
+\usepackage[table*]{xcolor}
+\xdefinecolor{gray95}{gray}{0.65}
+\xdefinecolor{gray25}{gray}{0.8}
+\title{Median and IQR}
+\author{}
+\begin{document}
+\maketitle
+\section{Table}
+\begin{table}[!htp]
+  \caption{Median and Interquartile Range of the HV quality indicator.}
+  \label{table:HV}
+  \centering
+  \begin{scriptsize}
+  \begin{tabular}{c|ccccccccccccc}
+      & \textbf{NSGAII} & \textbf{NSGAII surrogate iSOUPTR 10%} & \textbf{NSGAII surrogate iSOUPTR 20%} & \textbf{NSGAII surrogate iSOUPTR 30%} & \textbf{NSGAII surrogate LSTM 10%} & \textbf{NSGAII surrogate LSTM 20%} & \textbf{NSGAII surrogate LSTM 30%} & \textbf{NSGAII surrogate MOLMLP 10%} & \textbf{NSGAII surrogate MOLMLP 20%} & \textbf{NSGAII surrogate MOLMLP 30%} & \textbf{NSGAII surrogate RC 10%} & \textbf{NSGAII surrogate RC 20%} & \textbf{NSGAII surrogate RC 30%} \\\hline
+      \textbf{DTLZ7} & $4.19e-01_{4.98e-02} $ & $ 2.21e-01_{2.25e-02} $ & $ 2.73e-01_{7.84e-02} $ & $ 3.59e-01_{1.45e-01} $ & $ 2.41e-01_{3.34e-02} $ & $ 2.51e-01_{3.20e-02} $ & $ 2.17e-01_{7.04e-02} $ & $ \cellcolor{gray95} 6.25e-01_{4.88e-01} $ & $ \cellcolor{gray25} 4.45e-01_{1.84e-01} $ & $ 2.92e-01_{1.32e-01} $ & $ 3.70e-01_{5.62e-02} $ & $ 3.44e-01_{4.94e-02} $ & $ 4.28e-01_{6.52e-02}$ \\
+  \end{tabular}
+  \end{scriptsize}
+\end{table}
+\end{document}

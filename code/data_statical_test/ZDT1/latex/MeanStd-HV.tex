@@ -1,0 +1,24 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{tabularx}
+\usepackage{colortbl}
+\usepackage[table*]{xcolor}
+\xdefinecolor{gray95}{gray}{0.65}
+\xdefinecolor{gray25}{gray}{0.8}
+\title{Median and IQR}
+\author{}
+\begin{document}
+\maketitle
+\section{Table}
+\begin{table}[!htp]
+  \caption{Mean and Standard Deviation of the HV quality indicator.}
+  \label{table:HV}
+  \centering
+  \begin{scriptsize}
+  \begin{tabular}{c|ccccccccccccc}
+      & \textbf{NSGAII} & \textbf{NSGAII surrogate iSOUPTR 10%} & \textbf{NSGAII surrogate iSOUPTR 20%} & \textbf{NSGAII surrogate iSOUPTR 30%} & \textbf{NSGAII surrogate LSTM 10%} & \textbf{NSGAII surrogate LSTM 20%} & \textbf{NSGAII surrogate LSTM 30%} & \textbf{NSGAII surrogate MOLMLP 10%} & \textbf{NSGAII surrogate MOLMLP 20%} & \textbf{NSGAII surrogate MOLMLP 30%} & \textbf{NSGAII surrogate RC 10%} & \textbf{NSGAII surrogate RC 20%} & \textbf{NSGAII surrogate RC 30%} \\\hline
+      \textbf{ZDT1} & $7.67e-01_{4.15e-03} $ & $ \cellcolor{gray95} 3.63e+00_{5.00e+00} $ & $ 1.39e+00_{4.79e-01} $ & $ 8.38e-01_{1.79e-01} $ & $ 9.01e-01_{1.56e-01} $ & $ 8.00e-01_{3.13e-02} $ & $ 7.91e-01_{3.10e-02} $ & $ \cellcolor{gray25} 1.46e+00_{3.58e-01} $ & $ 9.54e-01_{1.02e-01} $ & $ 8.59e-01_{3.80e-02} $ & $ 1.07e+00_{8.96e-02} $ & $ 9.21e-01_{1.86e-02} $ & $ 9.10e-01_{1.09e-02}$ \\
+  \end{tabular}
+  \end{scriptsize}
+\end{table}
+\end{document}

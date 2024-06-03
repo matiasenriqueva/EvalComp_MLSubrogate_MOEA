@@ -1,0 +1,13 @@
+	NSGAII surrogate iSOUPTR 10%	NSGAII surrogate iSOUPTR 20%	NSGAII surrogate iSOUPTR 30%	NSGAII surrogate LSTM 10%	NSGAII surrogate LSTM 20%	NSGAII surrogate LSTM 30%	NSGAII surrogate MOLMLP 10%	NSGAII surrogate MOLMLP 20%	NSGAII surrogate MOLMLP 30%	NSGAII surrogate RC 10%	NSGAII surrogate RC 20%	NSGAII surrogate RC 30%
+NSGAII	+	+	+	+	+	+	+	+	+	+	-	-
+NSGAII surrogate iSOUPTR 10%		-	+	+	o	o	o	o	o	o	o	o
+NSGAII surrogate iSOUPTR 20%			+	+	o	o	o	o	o	o	o	o
+NSGAII surrogate iSOUPTR 30%				-	o	o	o	o	o	o	o	o
+NSGAII surrogate LSTM 10%					o	o	o	o	o	o	o	o
+NSGAII surrogate LSTM 20%						-	o	o	o	o	o	o
+NSGAII surrogate LSTM 30%							o	o	o	o	o	o
+NSGAII surrogate MOLMLP 10%								o	o	o	o	o
+NSGAII surrogate MOLMLP 20%									-	o	o	o
+NSGAII surrogate MOLMLP 30%										o	o	o
+NSGAII surrogate RC 10%											o	o
+NSGAII surrogate RC 20%												-

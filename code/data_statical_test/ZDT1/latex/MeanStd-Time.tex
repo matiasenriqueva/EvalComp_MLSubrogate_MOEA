@@ -1,0 +1,24 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{tabularx}
+\usepackage{colortbl}
+\usepackage[table*]{xcolor}
+\xdefinecolor{gray95}{gray}{0.65}
+\xdefinecolor{gray25}{gray}{0.8}
+\title{Median and IQR}
+\author{}
+\begin{document}
+\maketitle
+\section{Table}
+\begin{table}[!htp]
+  \caption{Mean and Standard Deviation of the Time quality indicator.}
+  \label{table:Time}
+  \centering
+  \begin{scriptsize}
+  \begin{tabular}{c|ccccccccccccc}
+      & \textbf{NSGAII} & \textbf{NSGAII surrogate iSOUPTR 10%} & \textbf{NSGAII surrogate iSOUPTR 20%} & \textbf{NSGAII surrogate iSOUPTR 30%} & \textbf{NSGAII surrogate LSTM 10%} & \textbf{NSGAII surrogate LSTM 20%} & \textbf{NSGAII surrogate LSTM 30%} & \textbf{NSGAII surrogate MOLMLP 10%} & \textbf{NSGAII surrogate MOLMLP 20%} & \textbf{NSGAII surrogate MOLMLP 30%} & \textbf{NSGAII surrogate RC 10%} & \textbf{NSGAII surrogate RC 20%} & \textbf{NSGAII surrogate RC 30%} \\\hline
+      \textbf{ZDT1} & $\cellcolor{gray25} 1.27e+01_{1.76e-01} $ & $ 2.13e+01_{6.93e-01} $ & $ 2.15e+01_{4.65e-01} $ & $ 2.34e+01_{7.49e-01} $ & $ 2.35e+01_{7.19e-01} $ & $ 2.03e+01_{4.04e-01} $ & $ 2.06e+01_{5.07e-01} $ & $ 1.38e+01_{1.88e-01} $ & $ 1.36e+01_{3.02e-01} $ & $ 1.36e+01_{3.26e-01} $ & $ 1.32e+01_{2.90e-01} $ & $ 1.28e+01_{2.22e-01} $ & $ \cellcolor{gray95} 1.27e+01_{1.75e-01}$ \\
+  \end{tabular}
+  \end{scriptsize}
+\end{table}
+\end{document}

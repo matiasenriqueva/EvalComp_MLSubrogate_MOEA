@@ -1,0 +1,24 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{tabularx}
+\usepackage{colortbl}
+\usepackage[table*]{xcolor}
+\xdefinecolor{gray95}{gray}{0.65}
+\xdefinecolor{gray25}{gray}{0.8}
+\title{Median and IQR}
+\author{}
+\begin{document}
+\maketitle
+\section{Table}
+\begin{table}[!htp]
+  \caption{Median and Interquartile Range of the Time quality indicator.}
+  \label{table:Time}
+  \centering
+  \begin{scriptsize}
+  \begin{tabular}{c|ccccccccccccc}
+      & \textbf{NSGAII} & \textbf{NSGAII surrogate iSOUPTR 10%} & \textbf{NSGAII surrogate iSOUPTR 20%} & \textbf{NSGAII surrogate iSOUPTR 30%} & \textbf{NSGAII surrogate LSTM 10%} & \textbf{NSGAII surrogate LSTM 20%} & \textbf{NSGAII surrogate LSTM 30%} & \textbf{NSGAII surrogate MOLMLP 10%} & \textbf{NSGAII surrogate MOLMLP 20%} & \textbf{NSGAII surrogate MOLMLP 30%} & \textbf{NSGAII surrogate RC 10%} & \textbf{NSGAII surrogate RC 20%} & \textbf{NSGAII surrogate RC 30%} \\\hline
+      \textbf{ZDT1} & $\cellcolor{gray25} 1.28e+01_{1.49e-01} $ & $ 2.14e+01_{1.16e+00} $ & $ 2.16e+01_{2.37e-01} $ & $ 2.36e+01_{9.62e-01} $ & $ 2.33e+01_{2.69e-01} $ & $ 2.01e+01_{4.20e-01} $ & $ 2.04e+01_{6.43e-01} $ & $ 1.38e+01_{2.33e-01} $ & $ 1.35e+01_{2.59e-01} $ & $ 1.35e+01_{1.96e-01} $ & $ 1.32e+01_{4.10e-01} $ & $ 1.28e+01_{1.39e-01} $ & $ \cellcolor{gray95} 1.27e+01_{2.24e-01}$ \\
+  \end{tabular}
+  \end{scriptsize}
+\end{table}
+\end{document}

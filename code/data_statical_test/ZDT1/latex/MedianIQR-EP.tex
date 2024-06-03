@@ -1,0 +1,24 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{tabularx}
+\usepackage{colortbl}
+\usepackage[table*]{xcolor}
+\xdefinecolor{gray95}{gray}{0.65}
+\xdefinecolor{gray25}{gray}{0.8}
+\title{Median and IQR}
+\author{}
+\begin{document}
+\maketitle
+\section{Table}
+\begin{table}[!htp]
+  \caption{Median and Interquartile Range of the EP quality indicator.}
+  \label{table:EP}
+  \centering
+  \begin{scriptsize}
+  \begin{tabular}{c|ccccccccccccc}
+      & \textbf{NSGAII} & \textbf{NSGAII surrogate iSOUPTR 10%} & \textbf{NSGAII surrogate iSOUPTR 20%} & \textbf{NSGAII surrogate iSOUPTR 30%} & \textbf{NSGAII surrogate LSTM 10%} & \textbf{NSGAII surrogate LSTM 20%} & \textbf{NSGAII surrogate LSTM 30%} & \textbf{NSGAII surrogate MOLMLP 10%} & \textbf{NSGAII surrogate MOLMLP 20%} & \textbf{NSGAII surrogate MOLMLP 30%} & \textbf{NSGAII surrogate RC 10%} & \textbf{NSGAII surrogate RC 20%} & \textbf{NSGAII surrogate RC 30%} \\\hline
+      \textbf{ZDT1} & $7.89e-02_{6.89e-03} $ & $ 1.17e-03_{4.45e-01} $ & $ \cellcolor{gray95} -5.75e-02_{1.81e-01} $ & $ 8.24e-02_{1.54e-02} $ & $ 8.33e-02_{6.72e-02} $ & $ 7.45e-02_{2.01e-02} $ & $ 7.48e-02_{8.89e-03} $ & $ \cellcolor{gray25} -2.23e-02_{9.04e-02} $ & $ 6.60e-02_{3.89e-02} $ & $ 5.75e-02_{1.31e-02} $ & $ 4.46e-02_{3.87e-02} $ & $ 7.55e-02_{1.51e-02} $ & $ 7.70e-02_{4.52e-03}$ \\
+  \end{tabular}
+  \end{scriptsize}
+\end{table}
+\end{document}

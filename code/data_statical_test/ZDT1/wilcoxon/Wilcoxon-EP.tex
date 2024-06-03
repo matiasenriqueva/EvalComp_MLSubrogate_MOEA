@@ -1,0 +1,33 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{tabularx}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\title{Wilcoxon - Mann-Whitney rank sum test}
+\author{}
+\begin{document}
+\maketitle
+\section{Table}
+\begin{table}[!htp]
+  \caption{Wilcoxon values of the EP quality indicator (ZDT1).}
+  \label{table:EP}
+  \centering
+  \begin{scriptsize}
+  \begin{tabular}{c|cccccccccccc}
+      & \textbf{NSGAII surrogate iSOUPTR 10%} & \textbf{NSGAII surrogate iSOUPTR 20%} & \textbf{NSGAII surrogate iSOUPTR 30%} & \textbf{NSGAII surrogate LSTM 10%} & \textbf{NSGAII surrogate LSTM 20%} & \textbf{NSGAII surrogate LSTM 30%} & \textbf{NSGAII surrogate MOLMLP 10%} & \textbf{NSGAII surrogate MOLMLP 20%} & \textbf{NSGAII surrogate MOLMLP 30%} & \textbf{NSGAII surrogate RC 10%} & \textbf{NSGAII surrogate RC 20%} & \textbf{NSGAII surrogate RC 30%} \\\hline
+      \textbf{NSGAII} & $\text{--}\  $ & $ \triangledown\  $ & $ \text{--}\  $ & $ \text{--}\  $ & $ \text{--}\  $ & $ \text{--}\  $ & $ \triangledown\  $ & $ \text{--}\  $ & $ \triangledown\  $ & $ \triangledown\  $ & $ \text{--}\  $ & $ \text{--}\ $ \\
+      \textbf{NSGAII surrogate iSOUPTR 10%} & $ $ & $ \text{--}\  $ & $ \text{--}\  $ & $ \text{--}\  $ & $ \text{--}\  $ & $ \text{--}\  $ & $ \text{--}\  $ & $ \text{--}\  $ & $ \text{--}\  $ & $ \text{--}\  $ & $ \text{--}\  $ & $ \text{--}\ $ \\
+      \textbf{NSGAII surrogate iSOUPTR 20%} & $ $ & $  $ & $ \blacktriangle\  $ & $ \blacktriangle\  $ & $ \blacktriangle\  $ & $ \blacktriangle\  $ & $ \text{--}\  $ & $ \blacktriangle\  $ & $ \blacktriangle\  $ & $ \text{--}\  $ & $ \blacktriangle\  $ & $ \blacktriangle\ $ \\
+      \textbf{NSGAII surrogate iSOUPTR 30%} & $ $ & $  $ & $  $ & $ \text{--}\  $ & $ \text{--}\  $ & $ \text{--}\  $ & $ \triangledown\  $ & $ \text{--}\  $ & $ \triangledown\  $ & $ \triangledown\  $ & $ \text{--}\  $ & $ \text{--}\ $ \\
+      \textbf{NSGAII surrogate LSTM 10%} & $ $ & $  $ & $  $ & $  $ & $ \text{--}\  $ & $ \text{--}\  $ & $ \triangledown\  $ & $ \text{--}\  $ & $ \text{--}\  $ & $ \text{--}\  $ & $ \text{--}\  $ & $ \text{--}\ $ \\
+      \textbf{NSGAII surrogate LSTM 20%} & $ $ & $  $ & $  $ & $  $ & $  $ & $ \text{--}\  $ & $ \triangledown\  $ & $ \text{--}\  $ & $ \triangledown\  $ & $ \triangledown\  $ & $ \text{--}\  $ & $ \text{--}\ $ \\
+      \textbf{NSGAII surrogate LSTM 30%} & $ $ & $  $ & $  $ & $  $ & $  $ & $  $ & $ \triangledown\  $ & $ \text{--}\  $ & $ \triangledown\  $ & $ \triangledown\  $ & $ \text{--}\  $ & $ \text{--}\ $ \\
+      \textbf{NSGAII surrogate MOLMLP 10%} & $ $ & $  $ & $  $ & $  $ & $  $ & $  $ & $  $ & $ \blacktriangle\  $ & $ \blacktriangle\  $ & $ \blacktriangle\  $ & $ \blacktriangle\  $ & $ \blacktriangle\ $ \\
+      \textbf{NSGAII surrogate MOLMLP 20%} & $ $ & $  $ & $  $ & $  $ & $  $ & $  $ & $  $ & $  $ & $ \text{--}\  $ & $ \text{--}\  $ & $ \text{--}\  $ & $ \text{--}\ $ \\
+      \textbf{NSGAII surrogate MOLMLP 30%} & $ $ & $  $ & $  $ & $  $ & $  $ & $  $ & $  $ & $  $ & $  $ & $ \text{--}\  $ & $ \blacktriangle\  $ & $ \blacktriangle\ $ \\
+      \textbf{NSGAII surrogate RC 10%} & $ $ & $  $ & $  $ & $  $ & $  $ & $  $ & $  $ & $  $ & $  $ & $  $ & $ \blacktriangle\  $ & $ \blacktriangle\ $ \\
+      \textbf{NSGAII surrogate RC 20%} & $ $ & $  $ & $  $ & $  $ & $  $ & $  $ & $  $ & $  $ & $  $ & $  $ & $  $ & $ \text{--}\ $ \\
+  \end{tabular}
+  \end{scriptsize}
+\end{table}
+\end{document}
